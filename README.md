@@ -4,6 +4,11 @@ A kit to package Clojure(Script) code as AWS Lambda functions, with a focus on
 eliminting boilerplate, rather than on deployment (for which AWS'
 CloudFormation, CLI and SDKs all do an admirible job).
 
+## Status
+
+
+[![Clojars Project](https://img.shields.io/clojars/v/boot-aws-lambda-kit.svg)](https://clojars.org/boot-aws-lambda-kit)
+
 ## Usage
 
 ### cljs
@@ -44,11 +49,10 @@ Exporting hellolambda.core/main as AWS Lambda handler hellolambda.handler
 Writing hellolambda.zip...
 ```
 
-and produce a zip that can be uploaded to S3 or to Lambda directly via the
-console, and installed with the handler name `hellolambda.handler`; the CLJS
-build id (the name of the .cljs.edn build spec file) defines the Javascript
-module name, and the `[:boot-aws-lambda-kit/handler :as]` key the function
-name.
+and a zip that can be uploaded to S3, or to Lambda directly via the console,
+and installed with the handler name `hellolambda.handler`; the CLJS build id
+(the name of the .cljs.edn build spec file) defines the Javascript module name,
+and the `[:boot-aws-lambda-kit/handler :as]` key the function name.
 
 ## Alternatives
 
@@ -58,7 +62,7 @@ name.
         <tt>boot-lambda</tt>'s <tt>generate-cljs-lambda-index</tt>, making it a
         drop-in solution for other projects that already use this pattern.  For
         new projects, <tt>boot-lambda</tt> is now a comprehensive CLJS
-        solution, but <tt>boot-aws-lambda-kit</tt> aspires to cater for both 
+        solution, but <tt>boot-aws-lambda-kit</tt> aspires to cater for both
         Clojure and ClojureScript.
     </dd>
     <dt>https://github.com/mhjort/clj-lambda-utils</dt>
