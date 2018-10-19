@@ -7,7 +7,7 @@
             [adzerk.bootlaces   :as laces]))
 
 (def project 'boot-aws-lambda-kit)
-(def version "0.1.0-SNAPSHOT")
+(def version "0.2.0-SNAPSHOT")
 
 (laces/bootlaces! version :dont-modify-paths? true)
 
