@@ -6,6 +6,7 @@ CloudFormation, CLI and SDKs all do an admirible job).
 
 ## Status
 
+[![Build Status](https://travis-ci.org/sinistral/boot-aws-lambda-kit.svg?branch=master)](https://travis-ci.org/sinistral/boot-aws-lambda-kit)
 [![Clojars Project](https://img.shields.io/clojars/v/boot-aws-lambda-kit.svg)](https://clojars.org/boot-aws-lambda-kit)
 
 ## Usage
