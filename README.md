@@ -69,13 +69,9 @@ and the `[:boot-aws-lambda-kit/handler :as]` key the function name.
     <dd>Primarily for the deployment of Lambda functions</dd>
 </dl>
 
-# License
+## License
 
 Published under the [2-clause BSD license][license].
-
-Copyright © 2018 Marc Daya
-
-#
 
 [boot-cljs]: https://github.com/boot-clj/boot-cljs
 [.cljs.edn]: https://github.com/boot-clj/boot-cljs/blob/master/docs/cljs.edn.md
