@@ -2,7 +2,8 @@
 (ns boot-aws-lambda-kit.cljs-test
   (:require [clojure.java.io          :as io]
             [clojure.test             :as test :refer [deftest is testing]]
-            [boot.tmpdir              :as boot-temp]
+            [boot.pod                 :as pod]
+            [boot.tmpdir              :as tmpdir]
             [boot-aws-lambda-kit.cljs :as balk :refer [handler]]
             [familiar.test])
   (:import  [java.nio.file Files]
@@ -17,7 +18,10 @@
   []
   (let [dir (tempdir)]
     {:dir dir
-     :fs  (TmpFileSet. [(boot-temp/map->TmpDir {:dir dir :input true})] {} (tempdir) {})}))
+     :fs  (TmpFileSet. [(tmpdir/map->TmpDir {:dir dir :input true})] {} (tempdir) {})}))
+
+(defn spit-to [dir path contents]
+  (spit (doto (apply io/file dir path) io/make-parents) contents))
 
 (defn apply-handler
   [h & args]
@@ -29,15 +33,12 @@
          #(= {:expected "foo.cljs.edn" :received '()} %)
          (apply-handler mw (:fs (make-fs)))))))
 
-(defn spit-to [dir path contents]
-  (spit (doto (apply io/file dir path) io/make-parents) contents))
-
 (deftest test:many-cljs-build-config
   (let [{:keys [dir fs]} (make-fs)
         d1 (doto (tempdir)
              (spit-to ["a" "foo.cljs.edn"] "content of a")
              (spit-to ["b" "foo.cljs.edn"] "content of b"))
-        fs (-> fs (boot-temp/add dir d1 {}) (boot-temp/commit!))
+        fs (-> fs (tmpdir/add dir d1 {}) (tmpdir/commit!))
         mw (handler {:ids #{"foo"}})]
     (is (ex-thrown-with-data?
          #(and (= "foo.cljs.edn" (get % :expected))

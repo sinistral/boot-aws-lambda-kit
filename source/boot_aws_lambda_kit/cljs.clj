@@ -6,8 +6,9 @@
             [clojure.java.io :as io]
             [boot.core       :as boot-core]
             [boot.util       :as boot-util :refer [info]]
-            [stencil.core    :as stencil]
-            [familiar.core   :as familiar :refer [fmtstr single!]]))
+            [camel-snake-kebab.core :as csk :refer [->snake_case]]
+            [familiar.core   :as familiar :refer [fmtstr single!]]
+            [stencil.core    :as stencil]))
 
 (def handler-key :boot-aws-lambda-kit/handler)
 
@@ -41,7 +42,8 @@
   "Given the name of the CLJS function, derive the name under which the
   it will be exported in the project's main Javascript file."
   [x]
-  (when x (string/replace x #"/" ".")))
+  {:pre [(not (nil? x))]}
+  (when x (-> x (string/replace #"/" ".") (->snake_case))))
 
 (defn ^{:private true} render-insert
   [spec]
@@ -52,14 +54,14 @@
   (info (fmtstr "Generating AWS Lambda for build \"~a\"~%" id))
   (let [temp-dir   (boot-core/tmp-dir!)
         _          (boot-core/empty-dir! temp-dir)
-        ;; Read the description of the CLJS build that is
-        ;; compiliing the handler
+        ;; Read the description of the CLJS build that is compiliing the
+        ;; handler
         build-spec (read-string
                     (slurp
                      (boot-core/tmp-file
                       (boot-cljs-build-config-file id fs))))
-        ;; The build config must include a description of the
-        ;; handler specification.
+        ;; The build config must include a description of the handler
+        ;; specification.
         js-fn-name (or (cljs->js:fn-name
                         (get-in build-spec [handler-key :fn]))
                        (throw
@@ -67,20 +69,19 @@
                                          id
                                          [handler-key :fn])
                                  {:cljs-build {:id id :config build-spec}})))
-        ;; Render from our Mustache template the Javascript
-        ;; fragment that defines the export.
+        ;; Render from our Mustache template the Javascript fragment that
+        ;; defines the export.
         js-insert  (render-insert
                     (assoc (get build-spec handler-key)
                            :fn
                            js-fn-name))
-        ;; Derive the File object for the module entry point, to
-        ;; which the export fragment will be written.
+        ;; Derive the File object for the module entry point, to which the
+        ;; export fragment will be written.
         js-file    (boot-cljs-main-js-file id fs)
         out-file   (io/file temp-dir (boot-core/tmp-path js-file))]
-    (info (fmtstr "Exporting ~a as AWS Lambda handler ~a.~a~%"
+    (info (fmtstr "Exporting ~a as AWS Lambda handler ~s"
                   (get-in build-spec [handler-key :fn])
-                  id
-                  (get-in build-spec [handler-key :as])))
+                  js-fn-name))
     (spit out-file (str (slurp (boot-core/tmp-file js-file)) js-insert))
     (-> fs
         (boot-core/rm [js-file])             ; remove defunct .js
