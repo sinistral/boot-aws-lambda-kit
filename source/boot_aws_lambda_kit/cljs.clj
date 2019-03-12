@@ -79,7 +79,7 @@
         ;; export fragment will be written.
         js-file    (boot-cljs-main-js-file id fs)
         out-file   (io/file temp-dir (boot-core/tmp-path js-file))]
-    (info (fmtstr "Exporting ~a as AWS Lambda handler ~s"
+    (info (fmtstr "Exporting ~a as AWS Lambda handler ~s~%"
                   (get-in build-spec [handler-key :fn])
                   js-fn-name))
     (spit out-file (str (slurp (boot-core/tmp-file js-file)) js-insert))
