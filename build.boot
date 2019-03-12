@@ -9,7 +9,7 @@
                    [familiar                "0.1.0"]
                    [stencil                 "0.5.0"]
 
-                   [adzerk/boot-test        "1.2.1-SNAPSHOT" :scope "test"]
+                   [sinistral/boot-test     "1.2.1-SNAPSHOT" :scope "test"]
                               ; https://github.com/adzerk-oss/boot-test/pull/36
                    [adzerk/bootlaces        "0.1.13"         :scope "test"]
 
